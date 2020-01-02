@@ -82,10 +82,12 @@ def rbac_require_all_roles(required_roles=[]):
 
 @required_settings(['RBAC_ROLE_ROOT'])
 class RBACPlugin(MachineBasePlugin):
+    """Role based access control"""
 
     @respond_to(regex=r'^grant\s+role\s+(?P<role>\w+)\s+to\s+<@(?P<user_id>\w+)>$')
     @rbac_require_any_role(['root', 'admin'])
     def grant_role_to_user(self, msg, role, user_id):
+        """grant role <role> to @user"""
         if role == 'root':
             msg.say("Sorry, role `root` can only be granted via static configuration")
             return
@@ -97,6 +99,7 @@ class RBACPlugin(MachineBasePlugin):
     @respond_to(regex=r'^revoke\s+role\s+(?P<role>\w+)\s+from\s+<@(?P<user_id>\w+)>$')
     @rbac_require_any_role(['root', 'admin'])
     def revoke_role_from_user(self, msg, role, user_id):
+        """revoke role <role> from @user"""
         assigned_roles = _get_assigned_role(self, role)
         if user_id in assigned_roles:
             del assigned_roles[user_id]
@@ -108,9 +111,11 @@ class RBACPlugin(MachineBasePlugin):
     @respond_to(regex=r'^who\s+has\s+role\s+(?P<role>\w+)')
     @rbac_require_any_role(['root', 'admin'])
     def who_has_role(self, msg, role):
+        """who has role <role>"""
         assigned_roles = _get_assigned_role(self, role)
         if len(assigned_roles):
             msg.say(
-                f'Role `{role}` has been granted to {", ".join([f"<@{user_id}>" for user_id in assigned_roles.keys()])}')
+                f'Role `{role}` has been granted to {", ".join([f"<@{user_id}>" for user_id in assigned_roles.keys()])}'
+            )
         else:
             msg.say(f'No one have been assigned role `{role}`')
