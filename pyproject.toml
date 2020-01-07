@@ -18,7 +18,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.7.0"
-slack-machine = "^0.18.2"
+slack-machine = "^0.19.2"
 arrow = "^0.15.4"
 
 # [tool.poetry.dev-dependencies]
